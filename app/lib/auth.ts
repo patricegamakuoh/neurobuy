@@ -130,16 +130,24 @@ export const auth = {
 export const serverAuth = {
   // Get user from server-side
   async getUser() {
-    const supabase = createServerClient()
-    const { data: { user }, error } = await supabase.auth.getUser()
-    return { user, error }
+    try {
+      const supabase = createServerClient()
+      const { data: { user }, error } = await supabase.auth.getUser()
+      return { user, error }
+    } catch (err) {
+      return { user: null, error: new Error('Supabase not configured') }
+    }
   },
 
   // Get session from server-side
   async getSession() {
-    const supabase = createServerClient()
-    const { data: { session }, error } = await supabase.auth.getSession()
-    return { session, error }
+    try {
+      const supabase = createServerClient()
+      const { data: { session }, error } = await supabase.auth.getSession()
+      return { session, error }
+    } catch (err) {
+      return { session: null, error: new Error('Supabase not configured') }
+    }
   },
 }
 
