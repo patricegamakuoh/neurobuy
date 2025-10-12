@@ -6,12 +6,14 @@ import { useState } from 'react'
 
 interface Product {
   id: string
-  name: string
+  vendor_id: string
+  name: string | null
   description: string | null
-  price: number
-  image_url: string | null
+  price: number | null
+  currency: string
   category: string | null
-  stock_quantity: number
+  image_urls: string[] | null
+  stock: number
 }
 
 interface ProductCardProps {
@@ -34,23 +36,25 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }
   }
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null) => {
+    if (!price) return 'Price not available'
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: product.currency === 'XAF' ? 'XAF' : 'USD'
     }).format(price)
   }
 
-  const isOutOfStock = product.stock_quantity <= 0
+  const isOutOfStock = product.stock <= 0
+  const productImage = product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null
 
   return (
     <div className="card group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <Link href={`/products/${product.id}`} className="block">
         <div className="aspect-square bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden">
-          {product.image_url && !imageError ? (
+          {productImage && !imageError ? (
             <Image
-              src={product.image_url}
-              alt={product.name}
+              src={productImage}
+              alt={product.name || 'Product'}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               onError={() => setImageError(true)}
@@ -80,7 +84,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       <div className="p-4">
         <Link href={`/products/${product.id}`}>
           <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-            {product.name}
+            {product.name || 'Unnamed Product'}
           </h3>
         </Link>
         
@@ -97,7 +101,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           
           {!isOutOfStock && (
             <span className="text-xs text-muted-foreground">
-              {product.stock_quantity} in stock
+              {product.stock} in stock
             </span>
           )}
         </div>

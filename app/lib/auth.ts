@@ -6,6 +6,10 @@ import { User } from '@supabase/supabase-js'
 export const auth = {
   // Sign up with email and password
   async signUp(email: string, password: string, fullName?: string) {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -20,6 +24,10 @@ export const auth = {
 
   // Sign in with email and password
   async signIn(email: string, password: string) {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -29,6 +37,10 @@ export const auth = {
 
   // Sign in with Google
   async signInWithGoogle() {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -40,29 +52,49 @@ export const auth = {
 
   // Sign out
   async signOut() {
+    if (!supabase) {
+      return { error: new Error('Supabase not configured') }
+    }
+    
     const { error } = await supabase.auth.signOut()
     return { error }
   },
 
   // Get current user
   async getCurrentUser() {
+    if (!supabase) {
+      return { user: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data: { user }, error } = await supabase.auth.getUser()
     return { user, error }
   },
 
   // Get current session
   async getCurrentSession() {
+    if (!supabase) {
+      return { session: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data: { session }, error } = await supabase.auth.getSession()
     return { session, error }
   },
 
   // Listen to auth state changes
   onAuthStateChange(callback: (event: string, session: any) => void) {
+    if (!supabase) {
+      return { data: { subscription: { unsubscribe: () => {} } } }
+    }
+    
     return supabase.auth.onAuthStateChange(callback)
   },
 
   // Reset password
   async resetPassword(email: string) {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/reset-password`,
     })
@@ -71,6 +103,10 @@ export const auth = {
 
   // Update password
   async updatePassword(password: string) {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.updateUser({
       password,
     })
@@ -79,6 +115,10 @@ export const auth = {
 
   // Update user profile
   async updateProfile(updates: { full_name?: string; avatar_url?: string }) {
+    if (!supabase) {
+      return { data: null, error: new Error('Supabase not configured') }
+    }
+    
     const { data, error } = await supabase.auth.updateUser({
       data: updates,
     })

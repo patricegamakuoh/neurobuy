@@ -7,12 +7,14 @@ import { Button } from './ui/button'
 
 interface Product {
   id: string
-  name: string
+  vendor_id: string
+  name: string | null
   description: string | null
-  price: number
-  image_url: string | null
+  price: number | null
+  currency: string
   category: string | null
-  stock_quantity: number
+  image_urls: string[] | null
+  stock: number
 }
 
 interface ProductGridProps {

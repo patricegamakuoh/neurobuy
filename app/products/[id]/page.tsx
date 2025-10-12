@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     openGraph: {
       title: product.name,
       description: product.description || `Shop ${product.name} at NeuroBuy`,
-      images: product.image_url ? [product.image_url] : [],
+      images: product.image_urls && product.image_urls.length > 0 ? product.image_urls : [],
     },
   }
 }
@@ -41,14 +41,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound()
   }
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null) => {
+    if (!price) return 'Price not available'
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: product.currency === 'XAF' ? 'XAF' : 'USD'
     }).format(price)
   }
 
-  const isOutOfStock = product.stock_quantity <= 0
+  const isOutOfStock = product.stock <= 0
+  const productImage = product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,10 +93,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Product Image */}
             <div className="space-y-4">
               <div className="aspect-square bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg overflow-hidden">
-                {product.image_url ? (
+                {productImage ? (
                   <Image
-                    src={product.image_url}
-                    alt={product.name}
+                    src={productImage}
+                    alt={product.name || 'Product'}
                     width={600}
                     height={600}
                     className="w-full h-full object-cover"
@@ -131,14 +133,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </span>
                 ) : (
                   <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                    In Stock ({product.stock_quantity} available)
+                    In Stock ({product.stock} available)
                   </span>
                 )}
               </div>
 
               {/* Product Name */}
               <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                {product.name}
+                {product.name || 'Unnamed Product'}
               </h1>
 
               {/* Price */}
@@ -189,7 +191,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     className="border border-input rounded-md px-3 py-2 bg-background text-foreground"
                     defaultValue="1"
                   >
-                    {Array.from({ length: Math.min(product.stock_quantity, 10) }, (_, i) => (
+                    {Array.from({ length: Math.min(product.stock, 10) }, (_, i) => (
                       <option key={i + 1} value={i + 1}>
                         {i + 1}
                       </option>
