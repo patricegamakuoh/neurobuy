@@ -55,7 +55,7 @@ export default function ProductGrid({
       }
 
       if (result.error) {
-        throw new Error(result.error instanceof Error ? result.error.message : 'Failed to fetch products')
+        throw new Error(typeof result.error === 'string' ? result.error : 'Failed to fetch products')
       }
 
       const newProducts = result.data || []

@@ -5,15 +5,15 @@ import { Button } from '../components/ui/button'
 import Link from 'next/link'
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     category?: string
     search?: string
     page?: string
-  }
+  }>
 }
 
-export default function ProductsPage({ searchParams }: ProductsPageProps) {
-  const { category, search } = searchParams
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const { category, search } = await searchParams
 
   return (
     <div className="min-h-screen bg-background">

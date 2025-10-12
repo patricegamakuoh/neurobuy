@@ -7,13 +7,14 @@ import { products } from '../../lib/database'
 import { Metadata } from 'next'
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { data: product } = await products.getById(params.id)
+  const { id } = await params
+  const { data: product } = await products.getById(id)
   
   if (!product) {
     return {
@@ -33,7 +34,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { data: product, error } = await products.getById(params.id)
+  const { id } = await params
+  const { data: product, error } = await products.getById(id)
 
   if (error || !product) {
     notFound()

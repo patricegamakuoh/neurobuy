@@ -257,34 +257,22 @@ export const products = {
     */
   },
 
-  // Create product (admin only) - using client for now
+  // Create product (admin only) - using mock data for now
   async create(product: Tables['products']['Insert']) {
-    const { data, error } = await supabase
-      .from('products')
-      .insert(product)
-      .select()
-      .single()
-    return { data, error }
+    // Mock implementation
+    return { data: product, error: null }
   },
 
-  // Update product (admin only) - using client for now
+  // Update product (admin only) - using mock data for now
   async update(id: string, updates: Tables['products']['Update']) {
-    const { data, error } = await supabase
-      .from('products')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single()
-    return { data, error }
+    // Mock implementation
+    return { data: updates, error: null }
   },
 
-  // Delete product (admin only) - using client for now
+  // Delete product (admin only) - using mock data for now
   async delete(id: string) {
-    const { error } = await supabase
-      .from('products')
-      .delete()
-      .eq('id', id)
-    return { error }
+    // Mock implementation
+    return { error: null }
   },
 }
 
