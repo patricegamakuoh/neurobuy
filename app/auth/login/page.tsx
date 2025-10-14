@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Container from '@/app/components/layout/Container'
 import { Button } from '@/app/components/ui/button'
+import SubmitButton from '@/app/components/SubmitButton'
 import { auth } from '@/app/lib/auth'
 import { redirect } from 'next/navigation'
 
@@ -43,7 +44,7 @@ export default function LoginPage() {
                 <label className="block text-sm mb-2" htmlFor="password">Password</label>
                 <input id="password" name="password" type="password" required className="w-full px-3 py-2 border rounded-md bg-background" />
               </div>
-              <Button type="submit" className="w-full">Sign In</Button>
+              <SubmitButton idleText="Sign In" pendingText="Signing in..." className="w-full" />
             </form>
             <p className="text-sm text-muted-foreground mt-4">
               Don&apos;t have an account? <Link className="text-primary" href="/auth/signup">Sign up</Link>
