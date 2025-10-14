@@ -22,8 +22,12 @@ export default function ContactPage() {
               <Link href="/contact" className="text-foreground font-medium">Contact</Link>
             </nav>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button size="sm">Get Started</Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/auth/login">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/auth/signup">Get Started</Link>
+              </Button>
             </div>
           </div>
         </Container>
