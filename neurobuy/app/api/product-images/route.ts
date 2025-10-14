@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '../../../lib/supabase/server'
+import { createServerClient } from '../../lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,19 +20,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Product ID and storage path are required' }, { status: 400 })
     }
 
-    // Verify user owns the product (through store ownership)
-    const { data: product } = await supabase
+    // Verify the requester owns the vendor for this product
+    const { data: productRow, error: productFetchError } = await supabase
       .from('products')
-      .select(`
-        id,
-        stores!inner (
-          owner
-        )
-      `)
+      .select('id, vendor_id')
       .eq('id', product_id)
       .single()
 
-    if (!product || product.stores.owner !== user.id) {
+    if (productFetchError || !productRow) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
+    const { data: vendorRow, error: vendorFetchError } = await supabase
+      .from('vendors')
+      .select('id, owner_id')
+      .eq('id', productRow.vendor_id)
+      .single()
+
+    if (vendorFetchError || !vendorRow) {
+      return NextResponse.json({ error: 'Vendor not found' }, { status: 404 })
+    }
+
+    if (vendorRow.owner_id !== user.id) {
       return NextResponse.json({ error: 'You can only add images to your own products' }, { status: 403 })
     }
 

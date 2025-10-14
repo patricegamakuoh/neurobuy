@@ -24,7 +24,7 @@ export default function LoginPage() {
       
       if (error) {
         setError(error.message)
-      } else if (data.user) {
+      } else if (data?.user) {
         // Redirect to dashboard or home page
         router.push('/dashboard')
       }

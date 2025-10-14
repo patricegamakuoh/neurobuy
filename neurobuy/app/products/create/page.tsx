@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../components/ui/button'
 import { Container } from '../../components/layout/Container'
-import { ImageUpload } from '../../components/ImageUpload'
+import ImageUpload from '../../components/ImageUpload'
 import { auth } from '../../lib/auth'
 
 interface Store {

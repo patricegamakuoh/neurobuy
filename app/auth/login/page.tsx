@@ -10,10 +10,10 @@ export default function LoginPage() {
     const email = String(formData.get('email') || '')
     const password = String(formData.get('password') || '')
     const { error } = await auth.signIn(email, password)
-    if (!error) {
-      redirect('/products')
+    if (error) {
+      redirect(`/auth/login?error=${encodeURIComponent(error.message || 'Failed to sign in')}`)
     }
-    return { error: error?.message || 'Failed to sign in' }
+    redirect('/products')
   }
 
   return (

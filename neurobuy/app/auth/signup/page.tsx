@@ -43,7 +43,7 @@ export default function SignupPage() {
       
       if (error) {
         setError(error.message)
-      } else if (data.user) {
+      } else if (data?.user) {
         // If user wants to be a vendor, redirect to store creation
         if (formData.isVendor) {
           router.push('/store/create')

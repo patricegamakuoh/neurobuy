@@ -11,10 +11,10 @@ export default function SignupPage() {
     const email = String(formData.get('email') || '')
     const password = String(formData.get('password') || '')
     const { error } = await auth.signUp(email, password, fullName)
-    if (!error) {
-      redirect('/products')
+    if (error) {
+      redirect(`/auth/signup?error=${encodeURIComponent(error.message || 'Failed to sign up')}`)
     }
-    return { error: error?.message || 'Failed to sign up' }
+    redirect('/products')
   }
 
   return (

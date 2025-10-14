@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Button } from '../../../components/ui/button'
-import { Container } from '../../../components/layout/Container'
-import { auth } from '../../../lib/auth'
+import { Button } from '../../components/ui/button'
+import { Container } from '../../components/layout/Container'
+import { auth } from '../../lib/auth'
 
 export default function CreateStorePage() {
   const [formData, setFormData] = useState({
